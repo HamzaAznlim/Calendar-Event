@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Calendar</title>
+		<link rel="stylesheet" href="./css/app.css" />
+	</head>
+
+	<body>
+		<div draggable="true" id="model__Calendar" class="model__Calendar">
+            <div class="header__Calendar_Model">
+                <span class="btn_ close__model"><svg xmlns="http://www.w3.org/2000/svg" width="12.825" height="13.825" viewBox="0 0 12.825 13.825"><defs><style>.a{fill:none;stroke:#707070;stroke-linecap:round;stroke-width:2px;}</style></defs><g transform="translate(-332.087 -59.087)"><line class="a" x2="10" y2="11" transform="translate(333.5 60.5)"/><line class="a" x1="10" y2="11" transform="translate(333.5 60.5)"/></g></svg></span>
+            </div>
+            <div class="model__body">
+                <div class="form__input__model">
+                    <input type="text" placeholder="Add Title" class="input__model" />
+                    <span class="line__"></span>
+                </div>
+
+                <button class="btn_ btn__model">Save</button>
+            </div>
+		</div>
+
+		<div class="container__Calendar">
+			<div id="header__Calendar">
+				<button class="btn_" id="Today_">Today</button>
+
+				<div class="date__Calendar">
+					<span class="arrow__prev">
+						<img src="./images/Icon ionic-ios-arrow-forward-1.svg" />
+					</span>
+					<span id="toDay_"> July 2021 </span>
+					<span class="arrow__next">
+						<img src="./images/Icon ionic-ios-arrow-forward.svg" />
+					</span>
+				</div>
+			</div>
+			<div id="weekdays">
+				<div>Sunday</div>
+				<div>Monday</div>
+				<div>Tuesday</div>
+				<div>Wednesday</div>
+				<div>Thursday</div>
+				<div>Friday</div>
+				<div>Saturday</div>
+			</div>
+			<div id="days__months"></div>
+		</div>
+
+		<script type="text/javascript" src="./js/app.js"></script>
+	</body>
+</html>
