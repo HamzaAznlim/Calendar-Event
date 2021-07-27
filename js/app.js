@@ -1,119 +1,157 @@
-
-
 const days__months = document.getElementById('days__months');
-const toDay_  = document.getElementById('toDay_');
-const arrow__next  = document.querySelector('.arrow__next');
-const arrow__prev  = document.querySelector('.arrow__prev');
-const close__model  = document.querySelector('.close__model');
-const model__Calendar  = document.querySelector('#model__Calendar');
+const toDay_ = document.getElementById('toDay_');
+const arrow__next = document.querySelector('.arrow__next');
+const arrow__prev = document.querySelector('.arrow__prev');
+const close__model = document.querySelector('.close__model');
+const input__model = document.querySelector('.input__model');
+const model__Calendar = document.querySelector('#model__Calendar');
+const model__Calendar__save = document.querySelector('#model__Calendar__save');
 
 let whatMonth = 0,
-    dayClickedOn=null;
+	dayClickedOn = null;
 
-const weekdaysArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+let eventsArr = localStorage.getItem('events')
+	? JSON.parse(localStorage.getItem('events'))
+	: [];
+
+const weekdaysArray = [
+	'Sunday',
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+];
+
+close__model.addEventListener('click', (e) => {
+	model__Calendar.classList.add('remove__model');
+
+	input__model.value = '';
+	dayClickedOn = null;
+	load__();
+});
+
+model__Calendar__save.addEventListener('click', () => {
+	if (input__model.value === '') {
+		alert('Please enter a something!!');
+	} else {
+		eventsArr.push({
+			data: dayClickedOn,
+			title: input__model.value,
+		});
+		localStorage.setItem('events', JSON.stringify(eventsArr));
+
+		model__Calendar.classList.add('remove__model');
+		dayClickedOn = null;
+		input__model.value = '';
+		load__();
+	}
+});
 
 
 
-close__model.addEventListener('click',(e)=>{
+const showModel = (date) => {
+	dayClickedOn = date;
+	const eventDay = eventsArr.find((item) => item.data === dayClickedOn);
 
-    model__Calendar.style.display='none';
-
-   document.querySelector('.input__model').value="";
-
-
-  
-
-})
+	if (eventDay) {
 
 
+        var proceed = confirm("Are you sure you want to proceed?");
+
+        if (proceed) {
+            eventsArr = eventsArr.filter((event) => event.data !== dayClickedOn);
+            localStorage.setItem('events', JSON.stringify(eventsArr));
+            load__();
+
+        } else {
+            return;
+        }
+
+       
+
+	} else {
+		model__Calendar.classList.remove('remove__model');
+	}
+};
 
 const load__ = () => {
+	const Dt = new Date();
 
-    const Dt =  new Date();
+	if (whatMonth !== 0) {
+		Dt.setMonth(new Date().getMonth() + whatMonth);
+	}
 
+	const day = Dt.getDate();
+	const month = Dt.getMonth();
+	const year = Dt.getFullYear();
 
-    if(whatMonth !== 0){
-        Dt.setMonth(new Date().getMonth() + whatMonth);
-    }
+	days__months.innerHTML = '';
 
-    const day = Dt.getDate();
-    const month = Dt.getMonth();
-    const year = Dt.getFullYear();
+	const firstDayOfMonth = new Date(year, month, 1);
+	const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+	const dateString = firstDayOfMonth.toLocaleDateString('en-us', {
+		weekday: 'long',
+		year: 'numeric',
+		month: 'numeric',
+		day: 'numeric',
+	});
+	const toDay = firstDayOfMonth.toLocaleDateString('en-us', {
+		month: 'long',
+		year: 'numeric',
+	});
 
-    
+	const paddingDays = weekdaysArray.indexOf(dateString.split(', ')[0]);
 
-    days__months.innerHTML = '';
+	toDay_.innerText = toDay;
 
-    const firstDayOfMonth = new Date(year,month,1);
-    const daysInMonth = new Date(year,month+1,0).getDate();
+	for (let i = 1; i <= paddingDays + daysInMonth; i++) {
+		const daySquare = document.createElement('div');
 
-    const dateString = firstDayOfMonth.toLocaleDateString('en-us',{
-        weekday:'long',
-        year:'numeric',
-        month:'numeric',
-        day:'numeric',
-    });
-    const toDay = firstDayOfMonth.toLocaleDateString('en-us',{
-        month:'long',
-        year:'numeric',
-    });
+		const fullDate = `${month + 1}/${i - paddingDays}/${year}`;
+		daySquare.classList.add('day_');
 
-    const paddingDays = weekdaysArray.indexOf(dateString.split(', ')[0]);
+		if (i > paddingDays) {
+			daySquare.innerText = i - paddingDays;
 
-    toDay_.innerText =toDay;
+			const eventDay = eventsArr.find((item) => item.data === fullDate);
 
-    for(let i = 1; i <= paddingDays + daysInMonth; i++ ){
+			if (eventDay) {
+				EventDiv = document.createElement('div');
+				EventDiv.classList.add('note');
+				EventDiv.innerText = eventDay.title;
+				daySquare.appendChild(EventDiv);
+			}
 
-        const daySquare = document.createElement('div');
-        daySquare.classList.add('day_');
+			daySquare.addEventListener('click', () => showModel(fullDate));
+		} else {
+			daySquare.classList.add('disabled_');
+		}
 
-        if(i > paddingDays) {
+		if (day == i - paddingDays && month == new Date().getMonth()) {
+			daySquare.classList.add('currentDay');
+		}
 
-            daySquare.innerText= i - paddingDays;
-
-            daySquare.addEventListener('click',(e)=> {
-
-                if(model__Calendar.style.display == 'none'){
-                    model__Calendar.style.display='block';
-                } else{
-                    model__Calendar.style.display='none';
-                }
-            });
-
-        }else{
-            daySquare.classList.add('disabled_');
-        }
-
-        if(day == i - paddingDays && month == new Date().getMonth()){
-            daySquare.classList.add('currentDay');
-        }
-
-        days__months.appendChild(daySquare);
-
-    }
-
-
-}
-
-const initBtn = () =>{
-
-    arrow__next.addEventListener('click',()=>{
-        whatMonth++;
-        load__();
-    });
-
-    arrow__prev.addEventListener('click',()=>{
-        whatMonth--;
-        load__();
-    });
-
+		days__months.appendChild(daySquare);
+	}
 };
+
+const initBtn = () => {
+	arrow__next.addEventListener('click', () => {
+		whatMonth++;
+		load__();
+	});
+
+	arrow__prev.addEventListener('click', () => {
+		whatMonth--;
+		load__();
+	});
+};
+
+
+
 
 initBtn();
 load__();
-
-
-
-
-
