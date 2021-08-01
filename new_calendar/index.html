@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!--========== BOX ICONS ==========-->
+		<link
+			href="https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
+
+		<!--========== CSS ==========-->
+		<link rel="stylesheet" href="./css/style.css" />
+		<title>Calendar Events</title>
+	</head>
+	<body>
+		<!--========== START MODEL CALENDAR   ==========-->
+
+		<div class="model__Calendar">
+			<!--model Calendar Header -->
+			<div class="model__Calendar__header">
+				<span class="model__Calendar__header--remove">
+					<i class="bx bx-plus"></i>
+				</span>
+			</div>
+			<div class="model__Calendar__body">
+				<!--input Title -->
+				<div class="model__from">
+					<input
+						class="model__from--input"
+						type="text"
+						name="title"
+						id="title"
+						placeholder="Title Event..."
+					/>
+				</div>
+				<!--input Body -->
+				<div class="model__from">
+					<textarea
+						class="model__from--input"
+						type="text"
+						name="title"
+						id="title"
+						rows="11"
+						placeholder="Event Body..."
+					></textarea>
+				</div>
+				<!-- body footer -->
+				<div class="model__Calendar__body__footer">
+					<!-- Colors -->
+					<div class="model__Calendar__body__footer__colors">
+						<div
+							data-color="note__bg-primary"
+							class="color_ model__Calendar__body__footer__colors--blue active"
+						></div>
+						<div
+							data-color="note__bg-success"
+							class="color_ model__Calendar__body__footer__colors--green"
+						></div>
+						<div
+							data-color="note__bg-warning"
+							class="color_ model__Calendar__body__footer__colors--orange"
+						></div>
+						<div
+							data-color="note__bg-danger"
+							class="color_ model__Calendar__body__footer__colors--red"
+						></div>
+					</div>
+					<div>
+						<button class="btn_ model__Calendar__body__footer--btn">
+							Save
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--  Model Preview  Event -->
+		<div class="preview__model">
+			<!-- header of preview model -->
+			<div class="preview__model__header">
+				<span class="preview__model__header--icon">
+					<i class="bx bxs-trash-alt"></i>
+				</span>
+				<span class="preview__model__header--icon">
+					<i class="bx bxs-edit-alt"></i>
+				</span>
+				<span id="remove__preview" class="preview__model__header--icon">
+					<i class="bx bx-x"></i>
+				</span>
+			</div>
+			<!-- body of preview model -->
+			<div class="preview__model__body">
+				<h3 class="preview__model__body--title">PHP Framework</h3>
+				<p class="preview__model__body--paragraph">
+					Weekly on Monday, Tuesday, Thursday, Friday Weekly on Monday Tuesday,
+					Thursday, Friday
+				</p>
+			</div>
+		</div>
+		<!--========== START CONTAINER CALENDAR   ==========-->
+		<div class="Calendar__Container">
+			<!--==========  CONTAINER HEADER   ==========-->
+			<div class="Calendar__header">
+				<button class="btn_ Calendar__header--btn">Today</button>
+				<div class="Calendar__header--date__controller">
+					<i id="next__month" class="bx bx-left-arrow-alt"></i>
+					<span id="date__controller_show"> July 2021 </span>
+					<i id="prev__month" class="bx bx-right-arrow-alt"></i>
+				</div>
+			</div>
+
+			<!--==========  SHOW WEEKDAYS ==========-->
+			<div id="weekdays">
+				<div>Sunday</div>
+				<div>Monday</div>
+				<div>Tuesday</div>
+				<div>Wednesday</div>
+				<div>Thursday</div>
+				<div>Friday</div>
+				<div>Saturday</div>
+			</div>
+			<!--==========  SHOW DAYS OF THE MONTH ==========-->
+
+			<div id="days__of__month">
+				<div class="day disabled"></div>
+				<div class="day disabled"></div>
+				<div class="day disabled"></div>
+				<div class="day disabled"></div>
+				<div class="day">
+					<span class="day_num">1</span>
+					<div class="eventNote">Api Consume</div>
+				</div>
+				<div class="day"><span class="day_num">2</span></div>
+				<div class="day"><span class="day_num">3</span></div>
+				<div class="day"><span class="day_num">4</span></div>
+				<div class="day"><span class="day_num">5</span></div>
+				<div class="day"><span class="day_num">6</span></div>
+				<div class="day"><span class="day_num">7</span></div>
+				<div class="day"><span class="day_num">8</span></div>
+				<div class="day"><span class="day_num">9</span></div>
+				<div class="day"><span class="day_num">10</span></div>
+				<div class="day"><span class="day_num">11</span></div>
+				<div class="day"><span class="day_num">12</span></div>
+				<div class="day"><span class="day_num">13</span></div>
+				<div class="day">
+					<span class="day_num">14</span>
+					<div class="eventNote">Wordpress Api</div>
+					<div class="eventNote note__bg-danger">Laravel Api Crud</div>
+				</div>
+				<div class="day"><span class="day_num">15</span></div>
+				<div class="day"><span class="day_num">16</span></div>
+				<div class="day"><span class="day_num">17</span></div>
+				<div class="day"><span class="day_num">18</span></div>
+				<div class="day"><span class="day_num">19</span></div>
+				<div class="day"><span class="day_num">20</span></div>
+				<div class="day"><span class="day_num">21</span></div>
+				<div class="day"><span class="day_num">22</span></div>
+				<div class="day"><span class="day_num">23</span></div>
+				<div class="day"><span class="day_num">24</span></div>
+				<div class="day"><span class="day_num">25</span></div>
+				<div class="day"><span class="day_num">26</span></div>
+				<div class="day"><span class="day_num">27</span></div>
+				<div class="day"><span class="day_num active">28</span></div>
+				<div class="day">
+					<span class="day_num">29</span>
+					<div class="eventNote note__bg-primary">PHP Framework</div>
+				</div>
+				<div class="day"><span class="day_num">30</span></div>
+				<div class="day"><span class="day_num">31</span></div>
+			</div>
+		</div>
+		<!--========== MAIN JS ==========-->
+		<script src="./js/app.js"></script>
+	</body>
+</html>

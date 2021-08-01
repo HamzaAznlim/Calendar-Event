@@ -49,28 +49,20 @@ model__Calendar__save.addEventListener('click', () => {
 	}
 });
 
-
-
 const showModel = (date) => {
 	dayClickedOn = date;
 	const eventDay = eventsArr.find((item) => item.data === dayClickedOn);
 
 	if (eventDay) {
+		var proceed = confirm('Are you sure you want to proceed?');
 
-
-        var proceed = confirm("Are you sure you want to proceed?");
-
-        if (proceed) {
-            eventsArr = eventsArr.filter((event) => event.data !== dayClickedOn);
-            localStorage.setItem('events', JSON.stringify(eventsArr));
-            load__();
-
-        } else {
-            return;
-        }
-
-       
-
+		if (proceed) {
+			eventsArr = eventsArr.filter((event) => event.data !== dayClickedOn);
+			localStorage.setItem('events', JSON.stringify(eventsArr));
+			load__();
+		} else {
+			return;
+		}
 	} else {
 		model__Calendar.classList.remove('remove__model');
 	}
@@ -149,9 +141,6 @@ const initBtn = () => {
 		load__();
 	});
 };
-
-
-
 
 initBtn();
 load__();
