@@ -24,6 +24,9 @@ const weekdaysArray = [
 	'Saturday',
 ];
 
+
+
+
 close__model.addEventListener('click', (e) => {
 	model__Calendar.classList.add('remove__model');
 
@@ -69,6 +72,7 @@ const showModel = (date) => {
 };
 
 const load__ = () => {
+
 	const Dt = new Date();
 
 	if (whatMonth !== 0) {
@@ -109,7 +113,7 @@ const load__ = () => {
 			daySquare.innerText = i - paddingDays;
 
 			const eventDay = eventsArr.find((item) => item.data === fullDate);
-
+ 
 			if (eventDay) {
 				EventDiv = document.createElement('div');
 				EventDiv.classList.add('note');
@@ -118,6 +122,7 @@ const load__ = () => {
 			}
 
 			daySquare.addEventListener('click', () => showModel(fullDate));
+			
 		} else {
 			daySquare.classList.add('disabled_');
 		}

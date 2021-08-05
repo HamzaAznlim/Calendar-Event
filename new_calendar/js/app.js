@@ -1,44 +1,153 @@
-let events = [
+const dateToDay = document.getElementById('date__controller_show'),
+ 	  nextMonth = document.getElementById('next__month'),
+	  prevMonth = document.getElementById('prev__month'),
+	  daysMonth	= document.getElementById('days__month'),
+	  hideMainModel = document.querySelector('.model__Calendar__header--remove'),
+	  save = document.getElementById('save'),
+	  modelCalendarMain = document.querySelector('.model__Calendar'),
+	  title = document.getElementById('title'),
+	  body  = document.getElementById('body');
+	  
+
+let events = localStorage.getItem('events')
+	? JSON.parse(localStorage.getItem('events'))
+	: [];
+
+let dayClickedOn = null;
+let idEvent=null;
+let whatMonth 	 = 0;
+
+
+const weekdaysArray = [
+	'Sunday',
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+];
+
+
+const selectColor = () => {
+
+	const colors =  Array.from(document.querySelectorAll('.color_'))
+
+	colors.forEach((element) => {
+
+		element.addEventListener('click',(e)=>{
+
+			document.querySelector('.color_.active').classList.remove('active');
+
+			e.currentTarget.classList.add('active');
+			
+			console.log(e.currentTarget);
+
+		})
+	})
+
+
+
+}
+
+selectColor();
+
+/*
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+*/
+
+
+
+nextMonth.addEventListener('click', () => {
+	whatMonth++;
+	renderCalendar();
+});
+
+prevMonth.addEventListener('click', () => {
+	whatMonth--;
+	renderCalendar();
+});
+
+
+
+// Hide Main Model 
+hideMainModel.addEventListener('click', ()=>{ modelCalendarMain.style.display= 'none';})
+
+// Call addEvent function for adding Events on Click 
+save.addEventListener('click',()=> addEvent())
+
+
+
+// Show Main Model 
+const showModel = (e)=>{
+
+	 
+	if(e.target.classList.contains('eventNote')){
+
+		document.querySelector('.preview__model').style.display= 'block';
+
+		dayClickedOn = e.target.parentElement.getAttribute('to-date');
 		
-	{
-			data: '2021/07/14',
-			arrEvents: [
-				{
-					id: 1,
-					title :"React.js",
-					body: "Just a test for React"
-				},
-				{
-					id: 12,
-					title :"React Api",
-					body: "consume an Api"
-				},
-			]	
-		},
-        
-		{
-			data: '2021/07/30',
-			arrEvents: [
-				{	
-					id: 124,
-					title :"React.js",
-					body: "Just a test for React"
-				},		
-			]	
-		}
+		idEvent = e.target.getAttribute('id-event');
 
-]
+		const result = events.filter((el)=> el.data === dayClickedOn)[0].arrEvents.find((el)=> el.id ==idEvent);
+
+		console.log(result);
+		document.querySelector('#preview__model__title').textContent = result.title;
+	return;
+		
+	}
+
+	modelCalendarMain.style.display= 'block';
+	dayClickedOn = e.currentTarget.getAttribute('to-date');
+}
 
 
 
-// Add Event 
 
-const addEvent = (DateString,element)=>{
+/*
+=======================================================================
+	Clear the Inputs And load function  => renderCalendar
+=======================================================================
+*/
+
+const clearAndCall = ()=>{
+
+	modelCalendarMain.style.display= 'none';
+	title.value = "";
+	body.value = "";
+	renderCalendar();
+
+}
+
+
+/*
+=======================================================================
+	Add Event to The array [Events]  and set it to localStorage 
+=======================================================================
+*/
+const addEvent = () =>{
+
+	if(title.value === "" || body.value === ""){
+		alert("check")
+		return;
+	}
+
+	const color  = document.querySelector('.color_.active').getAttribute('data-color');
+
+	const element = {	
+		id: events.length+1,
+		title :title.value,
+		body: body.value,
+		color
+	};	
 	
-    let booleanTYPE;
+	let booleanTYPE;
 
 	events.map((el)=> {
-		if(el.data == DateString){
+		if(el.data == dayClickedOn){
 			booleanTYPE = true;
 			return;
 		}else{
@@ -50,58 +159,135 @@ const addEvent = (DateString,element)=>{
 	
 	if(booleanTYPE){
 
-		events.filter((el)=> el.data == DateString)[0].arrEvents.push(element);
+		events.filter((el)=> el.data == dayClickedOn)[0].arrEvents.push(element);
+		clearAndCall();
 		
 	}else{
 		events.push({
-			data:DateString,
+			data:dayClickedOn,
 			arrEvents: [
 				element	
 			]	
 		})
+		
+		clearAndCall();
 	}
-}
 
-addEvent('2021/07/30',{	
-	id: 12454,
-	title :"Laravel ",
-	body: "Create API Auth User"
-})
+	localStorage.setItem('events', JSON.stringify(events));
 
-
-// VIEW Event
-
-
-const getEvent = (date,id)=>{
-
-    return events.filter((el)=> el.data === date)[0].arrEvents.find((el)=> el.id ==id);
 }
 
 
+/*
+=======================================================================
+	Add Event to The array [Events]  and set it to localStorage 
+=======================================================================
+*/
+const renderDays = () =>{
 
-// editEvent function
 
-const editEvent = (date, arr,id)=>{
+	document.querySelectorAll('.day').forEach((el,index)=>{
 
-	events = arr.map((el)=>{
 
-		if(el.data === date) {
 
-			el.arrEvents.map((item)=>{
-				if(item.id == id){
-					item.title = "hamza"
-				}
-
-				return {...item}
-			})
+		if (typeof events !== 'undefined' && events.length === 0) {
+			return;
 		}
-		return el;
+
+	const eventDay =events.filter((item)=> item.data === el.getAttribute('to-date'))[0]
+
+		if(typeof eventDay !== 'undefined'){
+			
+				eventDay.arrEvents.forEach((item)=>{
+
+
+					const EventDiv = document.createElement('div');
+					EventDiv.setAttribute('id-event',item.id);
+					EventDiv.classList.add('eventNote');
+					EventDiv.classList.add(item.color);
+					EventDiv.innerText = item.title.substring(0,12) +'...' ;
+					el.appendChild(EventDiv);
+
+				})
+
+		}
+
 
 	})
-	
+
+
 }
 
-editEvent('2021/07/14',events,12);
+/*
+=================================================================================
+	Render All  Calendar Date load days month  in element => (#days__month)
+=================================================================================
+*/
+const renderCalendar = () =>{
+	daysMonth.innerHTML = '';
+
+	const Dt = new Date();
+
+	if (whatMonth !== 0) {
+		Dt.setMonth(new Date().getMonth() + whatMonth);
+	}
+
+	const day = Dt.getDate(),
+	 	  month = Dt.getMonth(),
+	      year = Dt.getFullYear(),
+	 	  firstDayOfMonth = new Date(year, month, 1),
+		  daysInMonth = new Date(year, month + 1, 0).getDate();
+
+	const dateString = firstDayOfMonth.toLocaleDateString('en-us', {
+		weekday: 'long',
+		year: 'numeric',
+		month: 'numeric',
+		day: 'numeric',
+	});
+
+	const toDay = firstDayOfMonth.toLocaleDateString('en-us', {
+		month: 'long',
+		year: 'numeric',
+	});
+
+	const positionOfDayOfWeek = weekdaysArray.indexOf(dateString.split(', ')[0]);
+
+	dateToDay.innerText = toDay;
+
+	for(let i = 1; i <= positionOfDayOfWeek + daysInMonth ; i++){
+
+		const daySquare = document.createElement('div');
+		const fullDate = `${month + 1}/${i - positionOfDayOfWeek}/${year}`;
+		daySquare.className='day';
+		daySquare.setAttribute('to-date',fullDate);
+
+		const span = document.createElement('span');
+		span.className='day_num';
+
+		if (i > positionOfDayOfWeek){
+
+			span.innerText = i - positionOfDayOfWeek;
+			daySquare.appendChild(span);
+
+			daySquare.addEventListener('click',(e)=>showModel(e))
 
 
 
+		} else {
+			daySquare.classList.add('disabled');
+		}
+
+		if (day == i - positionOfDayOfWeek && month == new Date().getMonth()) {
+			span.classList.add('active');
+		}
+
+		daysMonth.appendChild(daySquare);
+
+	}
+
+	renderDays();
+
+}
+
+
+renderCalendar();

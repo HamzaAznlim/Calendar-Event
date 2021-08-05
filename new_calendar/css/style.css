@@ -25,7 +25,7 @@
 	--biggest-font-size: 3.5rem;
 	--big-font-size: 1.6rem;
 	--normal-font-size: 1.3rem;
-	--small-font-size: 1.1rem;
+	--small-font-size: 1rem;
 	--arrow-font-size: 2.8rem;
 
 	/*========== Font weight ==========*/
@@ -139,13 +139,13 @@ body {
 
 /*========== Days OF THE Month  ==========*/
 
-#days__of__month {
+#days__month {
 	width: 1100px;
 	display: flex;
 	flex-wrap: wrap;
 }
 
-#days__of__month > .day {
+#days__month > .day {
 	cursor: pointer;
 	font-size: var(--normal-font-size);
 	width: 15.6rem;
@@ -159,7 +159,7 @@ body {
 	transition: all ease-in-out 0.3s;
 }
 
-#days__of__month > .day:not(.disabled_):hover {
+#days__month > .day:not(.disabled_):hover {
 	box-shadow: 1px 8px 12px rgba(2, 12, 56, 0.123);
 }
 
@@ -315,7 +315,7 @@ body {
 	background-color: var(--bg-color-warning)
 }
 
-.model__Calendar__body__footer__colors--blue.active{
+.color_.active{
 	border: 3px solid #fff;
 }
 
