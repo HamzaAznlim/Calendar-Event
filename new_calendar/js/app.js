@@ -6,7 +6,9 @@ const dateToDay = document.getElementById('date__controller_show'),
 	  save = document.getElementById('save'),
 	  modelCalendarMain = document.querySelector('.model__Calendar'),
 	  title = document.getElementById('title'),
-	  body  = document.getElementById('body');
+	  body  = document.getElementById('body'),
+	  removePreview  = document.getElementById('remove__preview'),
+	  deleteEvent  = document.getElementById('delete_event');
 	  
 
 let events = localStorage.getItem('events')
@@ -58,8 +60,6 @@ selectColor();
 ---------------------------------------------------------------------
 */
 
-
-
 nextMonth.addEventListener('click', () => {
 	whatMonth++;
 	renderCalendar();
@@ -70,10 +70,11 @@ prevMonth.addEventListener('click', () => {
 	renderCalendar();
 });
 
-
-
 // Hide Main Model 
 hideMainModel.addEventListener('click', ()=>{ modelCalendarMain.style.display= 'none';})
+
+// Hide Preview Model 
+removePreview.addEventListener('click', ()=>{ document.querySelector('.preview__model').style.display= 'none';})
 
 // Call addEvent function for adding Events on Click 
 save.addEventListener('click',()=> addEvent())
@@ -92,11 +93,12 @@ const showModel = (e)=>{
 		
 		idEvent = e.target.getAttribute('id-event');
 
-		const result = events.filter((el)=> el.data === dayClickedOn)[0].arrEvents.find((el)=> el.id ==idEvent);
+		const result = events.filter((el)=> el.date === dayClickedOn)[0].arrEvents.find((el)=> el.id ==idEvent);
 
 		console.log(result);
 		document.querySelector('#preview__model__title').textContent = result.title;
-	return;
+		document.querySelector('#preview__model__body').textContent = result.body;
+		return;
 		
 	}
 
@@ -147,7 +149,7 @@ const addEvent = () =>{
 	let booleanTYPE;
 
 	events.map((el)=> {
-		if(el.data == dayClickedOn){
+		if(el.date == dayClickedOn){
 			booleanTYPE = true;
 			return;
 		}else{
@@ -159,12 +161,12 @@ const addEvent = () =>{
 	
 	if(booleanTYPE){
 
-		events.filter((el)=> el.data == dayClickedOn)[0].arrEvents.push(element);
+		events.filter((el)=> el.date == dayClickedOn)[0].arrEvents.push(element);
 		clearAndCall();
 		
 	}else{
 		events.push({
-			data:dayClickedOn,
+			date:dayClickedOn,
 			arrEvents: [
 				element	
 			]	
@@ -178,40 +180,73 @@ const addEvent = () =>{
 }
 
 
+
 /*
 =======================================================================
-	Add Event to The array [Events]  and set it to localStorage 
+	Remove Event from Events array
 =======================================================================
 */
+console.log(events)
+
+const removeEvent = (date,id) =>{
+
+
+	let arr = {date: date,arrEvents:events.filter((el)=> el.date == date)[0].arrEvents.filter((item)=> item.id != id)};
+	let index_s = 0;
+
+	 let dez = events.map((el,index)=>{
+		if(el.date == date) {
+			index_s=index;
+		}
+		return el
+	})
+
+
+	let removed = events.splice(index_s, index_s, arr);
+
+	console.log(events);
+	
+	localStorage.setItem('events', JSON.stringify(events));
+	renderCalendar();
+	document.querySelector('.preview__model').style.display= 'none';
+
+}
+
+deleteEvent.addEventListener('click', ()=> removeEvent(dayClickedOn,idEvent))
+
+/*
+=======================================================================
+	display All Events in the (.day) class 
+=======================================================================
+*/
+
+
+
+
 const renderDays = () =>{
 
+	if(events.length === 0){
+		
+		return;
+	}
+	document.querySelectorAll('.day').forEach((el)=>{
 
-	document.querySelectorAll('.day').forEach((el,index)=>{
-
-
-
-		if (typeof events !== 'undefined' && events.length === 0) {
-			return;
-		}
-
-	const eventDay =events.filter((item)=> item.data === el.getAttribute('to-date'))[0]
-
-		if(typeof eventDay !== 'undefined'){
-			
-				eventDay.arrEvents.forEach((item)=>{
-
-
-					const EventDiv = document.createElement('div');
-					EventDiv.setAttribute('id-event',item.id);
-					EventDiv.classList.add('eventNote');
-					EventDiv.classList.add(item.color);
-					EventDiv.innerText = item.title.substring(0,12) +'...' ;
-					el.appendChild(EventDiv);
-
-				})
-
-		}
-
+			const eventDay = events.filter((item)=> item.date === el.getAttribute('to-date'))[0];
+			console.log(eventDay)
+			if(typeof eventDay !== 'undefined'){
+				
+					eventDay.arrEvents.forEach((item)=>{
+	
+						const EventDiv = document.createElement('div');
+						EventDiv.setAttribute('id-event',item.id);
+						EventDiv.classList.add('eventNote');
+						EventDiv.classList.add(item.color);
+						EventDiv.innerText = item.title.substring(0,15) +'..' ;
+						el.appendChild(EventDiv);
+	
+					})
+	
+			}
 
 	})
 
